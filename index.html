@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue Intro</title>
+  <link rel="stylesheet" type="text/css" href="index.css" media="screen" />
+</head>
+<body>
+  <div id="app"></div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      template: `
+        <div class="container">
+          <h1 class="container_title">TodoList</h1>
+          <form class="container_content" v-on:submit.prevent="addTask">
+            <label class="content_title">
+              title
+              <input 
+                class="content_input" 
+                placeholder="title" 
+                type="text" 
+                title="title" 
+                v-model="title" 
+              />
+            </label>
+            <label class="content_title">
+              task
+              <input 
+                class="content_input" 
+                placeholder="task" 
+                type="text" 
+                name="task" 
+                v-model="task" 
+              />
+            </label>
+            <button class="content_button">
+              submit
+            </button>
+          </form>
+          <div class="container_list_items">
+            <div class="container_item" v-for="(item, index) in allTasks">
+            <p class="item_title">{{item.title}}</p>
+            <p class="item_task">{{item.task}}</p>
+            <button class="item_delete" v-on:click="removeTask(index)">
+              delete
+            </button>
+          </div>
+          </div>
+        </div>
+      `,
+      data: {
+        list: [],
+        title: '',
+        task: '',
+      },
+      methods: {
+        addTask(){
+          // if (this.title.trim() === '' || this.task.trim() === '') {
+          //   return;
+          // }
+
+          this.list.push({
+            title: this.title,
+            task: this.task,
+          });
+
+          this.title = '';
+          this.task = '';
+        },
+        removeTask(index){
+          this.list.splice(index, 1);
+        }
+      },
+      computed: {
+        allTasks() {
+          return this.list.map(item => ({
+            ...item,
+            title: item.title.trim() === '' ? 'add a title' : item.title,
+            task: item.task.trim() === '' ? 'add a task' : item.task,
+          }))
+        }
+      }
+    })
+  </script>
+</body>
+</html>
